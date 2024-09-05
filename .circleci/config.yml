@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: 'circleci/node:10.16'
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_TOKEN
     working_directory: null
     steps:
       - checkout
@@ -17,3 +20,9 @@ jobs:
           key: 'v1.1-dependencies-{{ checksum "package-lock.json" }}'
       - run: npm run lint
       - run: npm test
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build:
+          context: Docker Auth
